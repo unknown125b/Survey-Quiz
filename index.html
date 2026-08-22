@@ -1,49 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Who Are You?</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Survey Quiz</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<button id="theme-toggle">🌙 / ☀️</button>
+  <button id="theme-toggle">🌙 / ☀️</button>
 
-<div class="container">
+  <div class="container">
 
-  <!-- Welcome Screen -->
-  <div id="welcome-screen" class="screen active">
-    <h1>Ready for the Survey?</h1>
-    <p>Answer various questions to see who you are</p>
-    <button id="start-btn">Start</button>
-  </div>
-
-  <!-- Quiz Screen -->
-  <div id="quiz-screen" class="screen">
-    <h2 id="question-text"></h2>
-    <div class="btn-group">
-      <button id="yes-btn">Yes</button>
-      <button id="no-btn">No</button>
+    <!-- Welcome Screen -->
+    <div id="welcome-screen" class="screen active">
+      <h1>Ready for the Survey?</h1>
+      <p>Answer various questions to see who you are!</p>
+      <button id="start-btn">Start</button>
     </div>
-    <button id="undo-btn" class="undo-btn" disabled>↩ Undo</button>
+
+    <!-- Quiz Screen -->
+    <div id="quiz-screen" class="screen">
+      <p id="progress"></p>
+      <h2 id="question-text"></h2>
+
+      <div class="btn-group">
+        <button id="yes-btn">Yes</button>
+        <button id="no-btn">No</button>
+      </div>
+
+      <button id="undo-btn" class="secondary-btn">Undo Last Answer</button>
+    </div>
+
+    <!-- Calibrating Screen -->
+    <div id="calibrating-screen" class="screen">
+      <h1>Calibrating...</h1>
+      <p>Analyzing your answers and finding your match...</p>
+      <div class="loader"></div>
+
+      <button id="calibration-undo-btn" class="secondary-btn">Undo Last Answer</button>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="result-screen" class="screen">
+      <h1 id="result-title">You are...</h1>
+
+      <div id="results-list"></div>
+
+      <button id="result-undo-btn" class="secondary-btn">Undo Last Answer</button>
+      <button id="restart-btn">Try Again</button>
+    </div>
+
   </div>
 
-  <!-- Calibrating Screen -->
-  <div id="calibrating-screen" class="screen">
-    <h1 id="calibrate-text">Calibrating...</h1>
-    <div class="loader"></div>
-    <p id="calibrate-sub">Please wait</p>
-  </div>
-
-  <!-- Result Screen -->
-  <div id="result-screen" class="screen">
-    <h1 id="result-title">You are...</h1>
-    <div id="results-container"></div>
-    <button id="restart-btn">Try Again</button>
-  </div>
-
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
