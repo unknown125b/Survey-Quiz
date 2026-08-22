@@ -35,7 +35,7 @@ const questions = [
   {
     text: "Are you good at survival & crafting games (Minecraft)?",
     yes: ["sgkhan", "markhor"],
-    no: ["crossbow", "tvman", "blue", "heizi", "crmsn", "death", "goku"]
+    no: ["crossbow", "tvman", "blue", "heizi", "crmsn", "death", "goku", "mrcake"]
   },
   {
     text: "Do you like single player games?",
@@ -50,7 +50,7 @@ const questions = [
   {
     text: "Are you good at auto-runner movement games (Geometry Dash)?",
     yes: ["heizi", "crmsn", "tvman"],
-    no: ["crossbow", "sgkhan", "blue", "markhor", "death", "goku"]
+    no: ["crossbow", "sgkhan", "blue", "markhor", "death", "goku", "mrcake"]
   },
   {
     text: "Are you good at action/rpg games?",
@@ -60,7 +60,7 @@ const questions = [
   {
     text: "Are you good at battle royale games?",
     yes: ["blue", "death", "goku"],
-    no: ["crossbow", "sgkhan", "tvman", "markhor", "heizi", "crmsn"]
+    no: ["crossbow", "sgkhan", "tvman", "markhor", "heizi", "crmsn", "mrcake"]
   },
   {
     text: "Are you good/avg at battleground games?",
@@ -70,7 +70,7 @@ const questions = [
   {
     text: "Are you good at horror games?",
     yes: ["blue", "markhor", "crmsn", "death", "goku", "sgkhan"],
-    no: ["crossbow", "tvman", "heizi"]
+    no: ["crossbow", "tvman", "heizi", "mrcake"]
   },
   {
     text: "Do you like 2d action/story games?",
@@ -85,50 +85,37 @@ let answerHistory = [];
 
 function resetScores() {
   scores = {};
-  Object.keys(people).forEach(function (key) {
-    scores[key] = 0;
-  });
+  for (const key in people) scores[key] = 0;
   answerHistory = [];
 }
 
-const quizScreen = document.getElementById("quiz-screen");
-const calibratingScreen = document.getElementById("calibrating-screen");
-const resultScreen = document.getElementById("result-screen");
+function $(id) {
+  return document.getElementById(id);
+}
 
-const startBtn = document.getElementById("start-btn");
-const yesBtn = document.getElementById("yes-btn");
-const noBtn = document.getElementById("no-btn");
-const undoBtn = document.getElementById("undo-btn");
-const restartBtn = document.getElementById("restart-btn");
-
-const questionText = document.getElementById("question-text");
-const calibrateText = document.getElementById("calibrate-text");
-const calibrateSub = document.getElementById("calibrate-sub");
-const resultTitle = document.getElementById("result-title");
-const resultsContainer = document.getElementById("results-container");
-
-function showScreen(screen) {
+function showScreen(id) {
   document.querySelectorAll(".screen").forEach(function (s) {
     s.classList.remove("active");
   });
-  screen.classList.add("active");
+  const el = $(id);
+  if (el) el.classList.add("active");
+}
+
+function updateUndoButton() {
+  const undoBtn = $("undo-btn");
+  if (undoBtn) undoBtn.disabled = answerHistory.length === 0;
+}
+
+function showQuestion() {
+  $("question-text").textContent = questions[currentQuestion].text;
+  updateUndoButton();
 }
 
 function startQuiz() {
   currentQuestion = 0;
   resetScores();
-  showScreen(quizScreen);
+  showScreen("quiz-screen");
   showQuestion();
-  updateUndoButton();
-}
-
-function showQuestion() {
-  questionText.textContent = questions[currentQuestion].text;
-  updateUndoButton();
-}
-
-function updateUndoButton() {
-  undoBtn.disabled = answerHistory.length === 0;
 }
 
 function answerQuestion(answer) {
@@ -140,9 +127,9 @@ function answerQuestion(answer) {
     people: list.slice()
   });
 
-  list.forEach(function (person) {
-    scores[person] += 1;
-  });
+  for (let i = 0; i < list.length; i++) {
+    scores[list[i]] += 1;
+  }
 
   currentQuestion += 1;
 
@@ -157,84 +144,95 @@ function undoAnswer() {
   if (answerHistory.length === 0) return;
 
   const last = answerHistory.pop();
-  last.people.forEach(function (person) {
-    scores[person] -= 1;
-  });
+  for (let i = 0; i < last.people.length; i++) {
+    scores[last.people[i]] -= 1;
+  }
 
   currentQuestion = last.questionIndex;
   showQuestion();
 }
 
 function startCalibrating() {
-  showScreen(calibratingScreen);
+  showScreen("calibrating-screen");
 
   const steps = [
-    { title: "Calibrating...", sub: "Please wait" },
-    { title: "Analyzing answers...", sub: "Crunching the numbers" },
-    { title: "Matching profile...", sub: "Almost there" },
-    { title: "Finalizing result...", sub: "One moment" }
+    ["Calibrating...", "Please wait"],
+    ["Analyzing answers...", "Crunching the numbers"],
+    ["Matching profile...", "Almost there"],
+    ["Finalizing result...", "One moment"]
   ];
 
   let i = 0;
-  calibrateText.textContent = steps[0].title;
-  calibrateSub.textContent = steps[0].sub;
+  $("calibrate-text").textContent = steps[0][0];
+  $("calibrate-sub").textContent = steps[0][1];
 
-  const interval = setInterval(function () {
+  // Always finishes, even if something else is slow
+  const timer = setInterval(function () {
     i += 1;
     if (i < steps.length) {
-      calibrateText.textContent = steps[i].title;
-      calibrateSub.textContent = steps[i].sub;
+      $("calibrate-text").textContent = steps[i][0];
+      $("calibrate-sub").textContent = steps[i][1];
     } else {
-      clearInterval(interval);
-      showResult();
+      clearInterval(timer);
+      try {
+        showResult();
+      } catch (err) {
+        console.error(err);
+        alert("Result error: " + err.message);
+      }
     }
-  }, 800);
+  }, 700);
 }
 
 function showResult() {
   let highest = -1;
-
-  Object.keys(scores).forEach(function (key) {
-    if (scores[key] > highest) {
-      highest = scores[key];
-    }
-  });
-
-  const winners = Object.keys(scores).filter(function (key) {
-    return scores[key] === highest;
-  });
-
-  if (winners.length === 1) {
-    resultTitle.textContent = "You are...";
-  } else {
-    resultTitle.textContent = "You could be...";
+  for (const key in scores) {
+    if (scores[key] > highest) highest = scores[key];
   }
 
-  resultsContainer.innerHTML = "";
+  const winners = [];
+  for (const key in scores) {
+    if (scores[key] === highest) winners.push(key);
+  }
 
-  winners.forEach(function (key) {
-    const person = people[key];
+  const title = $("result-title");
+  const container = $("results-container");
+
+  if (!title || !container) {
+    throw new Error("Missing result-title or results-container in HTML");
+  }
+
+  title.textContent = winners.length === 1 ? "You are..." : "You could be...";
+  container.innerHTML = "";
+
+  for (let i = 0; i < winners.length; i++) {
+    const person = people[winners[i]];
     const card = document.createElement("div");
     card.className = "result-card";
-    card.innerHTML =
-      '<img src="' + person.img + '" alt="' + person.name + '">' +
-      "<h2>" + person.name + "</h2>";
-    resultsContainer.appendChild(card);
-  });
 
-  showScreen(resultScreen);
+    const img = document.createElement("img");
+    img.src = person.img;
+    img.alt = person.name;
+
+    const name = document.createElement("h2");
+    name.textContent = person.name;
+
+    card.appendChild(img);
+    card.appendChild(name);
+    container.appendChild(card);
+  }
+
+  showScreen("result-screen");
 }
 
-startBtn.addEventListener("click", startQuiz);
-yesBtn.addEventListener("click", function () {
-  answerQuestion("yes");
-});
-noBtn.addEventListener("click", function () {
-  answerQuestion("no");
-});
-undoBtn.addEventListener("click", undoAnswer);
-restartBtn.addEventListener("click", startQuiz);
-
-document.getElementById("theme-toggle").addEventListener("click", function () {
-  document.body.classList.toggle("light");
+// Wire buttons after page loads
+window.addEventListener("DOMContentLoaded", function () {
+  $("start-btn").addEventListener("click", startQuiz);
+  $("yes-btn").addEventListener("click", function () { answerQuestion("yes"); });
+  $("no-btn").addEventListener("click", function () { answerQuestion("no"); });
+  $("undo-btn").addEventListener("click", undoAnswer);
+  $("restart-btn").addEventListener("click", startQuiz);
+  $("theme-toggle").addEventListener("click", function () {
+    document.body.classList.toggle("light");
+  });
 });
