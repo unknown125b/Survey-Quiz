@@ -57,13 +57,13 @@ const questions = [
   },
   {
     text: "Are you good at strategy games?",
-    yes: ["crossbow", "crmsn", "mrcake"],
-    no: ["sgkhan", "tvman", "blue", "markhor", "heizi", "death", "goku"]
+    yes: ["crossbow", "crmsn", "mrcake", "markhor"],
+    no: ["sgkhan", "tvman", "blue", "heizi", "death", "goku"]
   },
   {
     text: "Are you good at auto-runner movement games (Geometry Dash)?",
-    yes: ["heizi", "crmsn", "tvman"],
-    no: ["crossbow", "sgkhan", "blue", "markhor", "death", "goku", "mrcake"]
+    yes: ["heizi", "crmsn", "tvman", "markhor"],
+    no: ["crossbow", "sgkhan", "blue", "death", "goku", "mrcake"]
   },
   {
     text: "Are you good at action/rpg games?",
@@ -72,8 +72,8 @@ const questions = [
   },
   {
     text: "Are you good at battle royale games?",
-    yes: ["blue", "death", "goku", "crossbow"],
-    no: ["sgkhan", "tvman", "markhor", "heizi", "crmsn", "mrcake"]
+    yes: ["blue", "death", "goku", "crossbow", "markhor"],
+    no: ["sgkhan", "tvman", "heizi", "crmsn", "mrcake"]
   },
   {
     text: "Are you good/avg at battleground games?",
