@@ -32,8 +32,8 @@ const questions = [
   },
   {
     text: "Are you good at driving/racing games?",
-    yes: ["markhor", "death", "crossbow"],
-    no: ["sgkhan", "tvman", "blue", "heizi", "crmsn", "goku", "mrcake"]
+    yes: ["markhor", "death", "crossbow", "goku"],
+    no: ["sgkhan", "tvman", "blue", "heizi", "crmsn", "mrcake"]
   },
   {
     text: "Are you good/avg at obby games?",
@@ -47,18 +47,18 @@ const questions = [
   },
   {
     text: "Are you good at survival & crafting games (Minecraft)?",
-    yes: ["sgkhan", "markhor"],
-    no: ["crossbow", "tvman", "blue", "heizi", "crmsn", "death", "goku", "mrcake"]
+    yes: ["sgkhan", "markhor", "goku"],
+    no: ["crossbow", "tvman", "blue", "heizi", "crmsn", "death", "mrcake"]
   },
   {
     text: "Do you like single player games?",
-    yes: ["crmsn", "crossbow", "heizi", "mrcake"],
-    no: ["sgkhan", "tvman", "blue", "markhor", "death", "goku"]
+    yes: ["crmsn", "crossbow", "heizi", "mrcake", "goku"],
+    no: ["sgkhan", "tvman", "blue", "markhor", "death"]
   },
   {
     text: "Are you good at strategy games?",
-    yes: ["crossbow", "crmsn", "mrcake", "markhor"],
-    no: ["sgkhan", "tvman", "blue", "heizi", "death", "goku"]
+    yes: ["crossbow", "crmsn", "mrcake", "markhor", "goku"],
+    no: ["sgkhan", "tvman", "blue", "heizi", "death"]
   },
   {
     text: "Are you good at auto-runner movement games (Geometry Dash)?",
@@ -87,8 +87,8 @@ const questions = [
   },
   {
     text: "Do you like 2d action/story games?",
-    yes: ["crmsn", "mrcake"],
-    no: ["crossbow", "sgkhan", "tvman", "blue", "markhor", "heizi", "death", "goku"]
+    yes: ["crmsn", "mrcake","goku"],
+    no: ["crossbow", "sgkhan", "tvman", "blue", "markhor", "heizi", "death"]
   }
 ];
 
