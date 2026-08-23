@@ -32,8 +32,8 @@ const questions = [
   },
   {
     text: "Are you good at driving/racing games?",
-    yes: ["markhor", "death"],
-    no: ["crossbow", "sgkhan", "tvman", "blue", "heizi", "crmsn", "goku", "mrcake"]
+    yes: ["markhor", "death", "crossbow"],
+    no: ["sgkhan", "tvman", "blue", "heizi", "crmsn", "goku", "mrcake"]
   },
   {
     text: "Are you good/avg at obby games?",
@@ -72,13 +72,13 @@ const questions = [
   },
   {
     text: "Are you good at battle royale games?",
-    yes: ["blue", "death", "goku"],
-    no: ["crossbow", "sgkhan", "tvman", "markhor", "heizi", "crmsn", "mrcake"]
+    yes: ["blue", "death", "goku", "crossbow"],
+    no: ["sgkhan", "tvman", "markhor", "heizi", "crmsn", "mrcake"]
   },
   {
     text: "Are you good/avg at battleground games?",
-    yes: ["tvman", "heizi", "mrcake"],
-    no: ["crossbow", "sgkhan", "blue", "markhor", "crmsn", "death", "goku"]
+    yes: ["tvman", "heizi", "mrcake", "crossbow"],
+    no: ["sgkhan", "blue", "markhor", "crmsn", "death", "goku"]
   },
   {
     text: "Are you good at horror games?",
