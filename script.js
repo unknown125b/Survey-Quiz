@@ -11,6 +11,19 @@ const people = {
   mrcake:   { name: "Mr Cake",         img: "Mr Cake.png" }
 };
 
+// Real-life names for the scary question
+const realNames = {
+  heizi: "Giorgi",
+  markhor: "Abdullah",
+  death: "Yousaf",
+  crossbow: "Sanaullah",
+  crmsn: "Ali",
+  goku: "Saad",
+  tvman: "Unknown",
+  mrcake: "Ilteris"
+  // blue + sgkhan have no real-name mapping
+};
+
 const questions = [
   {
     text: "Are you good at fps/shooter games?",
@@ -82,11 +95,13 @@ const questions = [
 let currentQuestion = 0;
 let scores = {};
 let answerHistory = [];
+let currentWinners = [];
 
 function resetScores() {
   scores = {};
   for (const key in people) scores[key] = 0;
   answerHistory = [];
+  currentWinners = [];
 }
 
 function $(id) {
@@ -152,6 +167,19 @@ function undoAnswer() {
   showQuestion();
 }
 
+function getWinners() {
+  let highest = -1;
+  for (const key in scores) {
+    if (scores[key] > highest) highest = scores[key];
+  }
+
+  const winners = [];
+  for (const key in scores) {
+    if (scores[key] === highest) winners.push(key);
+  }
+  return winners;
+}
+
 function startCalibrating() {
   showScreen("calibrating-screen");
 
@@ -166,7 +194,6 @@ function startCalibrating() {
   $("calibrate-text").textContent = steps[0][0];
   $("calibrate-sub").textContent = steps[0][1];
 
-  // Always finishes, even if something else is slow
   const timer = setInterval(function () {
     i += 1;
     if (i < steps.length) {
@@ -174,39 +201,46 @@ function startCalibrating() {
       $("calibrate-sub").textContent = steps[i][1];
     } else {
       clearInterval(timer);
-      try {
-        showResult();
-      } catch (err) {
-        console.error(err);
-        alert("Result error: " + err.message);
-      }
+      currentWinners = getWinners();
+      maybeAskIdentity();
     }
   }, 700);
 }
 
+function maybeAskIdentity() {
+  // Real names for whoever won
+  const names = [];
+  for (let i = 0; i < currentWinners.length; i++) {
+    const key = currentWinners[i];
+    if (realNames[key]) names.push(realNames[key]);
+  }
+
+  // No mapped real names (e.g. only Blue / SG Khan) → skip to result
+  if (names.length === 0) {
+    showResult();
+    return;
+  }
+
+  let question;
+  if (currentWinners.length === 1 && names.length === 1) {
+    question = "Are you " + names[0] + "?";
+  } else {
+    question = "Are you one of them: " + names.join(", ") + "?";
+  }
+
+  $("identity-question").textContent = question;
+  showScreen("identity-screen");
+}
+
 function showResult() {
-  let highest = -1;
-  for (const key in scores) {
-    if (scores[key] > highest) highest = scores[key];
-  }
-
-  const winners = [];
-  for (const key in scores) {
-    if (scores[key] === highest) winners.push(key);
-  }
-
   const title = $("result-title");
   const container = $("results-container");
 
-  if (!title || !container) {
-    throw new Error("Missing result-title or results-container in HTML");
-  }
-
-  title.textContent = winners.length === 1 ? "You are..." : "You could be...";
+  title.textContent = currentWinners.length === 1 ? "You are..." : "You could be...";
   container.innerHTML = "";
 
-  for (let i = 0; i < winners.length; i++) {
-    const person = people[winners[i]];
+  for (let i = 0; i < currentWinners.length; i++) {
+    const person = people[currentWinners[i]];
     const card = document.createElement("div");
     card.className = "result-card";
 
@@ -225,13 +259,17 @@ function showResult() {
   showScreen("result-screen");
 }
 
-// Wire buttons after page loads
 window.addEventListener("DOMContentLoaded", function () {
   $("start-btn").addEventListener("click", startQuiz);
   $("yes-btn").addEventListener("click", function () { answerQuestion("yes"); });
   $("no-btn").addEventListener("click", function () { answerQuestion("no"); });
   $("undo-btn").addEventListener("click", undoAnswer);
   $("restart-btn").addEventListener("click", startQuiz);
+
+  // Yes/No on scary screen both continue to the reveal
+  $("identity-yes-btn").addEventListener("click", showResult);
+  $("identity-no-btn").addEventListener("click", showResult);
+
   $("theme-toggle").addEventListener("click", function () {
     document.body.classList.toggle("light");
   });
