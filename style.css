@@ -67,6 +67,18 @@ button:disabled { opacity: 0.4; cursor: not-allowed; }
   z-index: 10;
 }
 
+#scary-img {
+  max-width: 280px;
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+#identity-question {
+  margin: 10px 0 20px;
+  line-height: 1.4;
+}
+
 #results-container {
   display: flex;
   flex-wrap: wrap;
